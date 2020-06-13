@@ -1,0 +1,107 @@
+﻿<Window x:Class="ControlsDemo.Window2"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControlsDemo"
+        xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
+        xmlns:kmDevWpfControls="clr-namespace:KmDevWpfControls;assembly=KmDevWpfControls"
+        mc:Ignorable="d"
+        x:Name="mainWindow"
+        Title="Window2" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self},Path=ViewModel}">
+  <Window.CommandBindings>
+    <CommandBinding Command="Open" Executed="CommandBinding_OnExecuted"/>
+  </Window.CommandBindings>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Menu><MenuItem Header="File"><MenuItem Header="Open" Command="Open"/>
+    <MenuItem Header="Special" Click="MenuItem_OnClick"/></MenuItem></Menu>
+    <avalondock:DockingManager Grid.Row="1" x:Name="DM" AnchorablesSource="{Binding Anchorables}">
+      <avalondock:DockingManager.Layout>
+        <avalondock:LayoutRoot>
+          <avalondock:LayoutRoot.TopSide>
+            <avalondock:LayoutAnchorSide>
+              <avalondock:LayoutAnchorGroup>
+                <avalondock:LayoutAnchorable Title="poo">
+                  <RichTextBox />
+                </avalondock:LayoutAnchorable>
+              </avalondock:LayoutAnchorGroup>
+
+            </avalondock:LayoutAnchorSide>
+          </avalondock:LayoutRoot.TopSide>
+          <avalondock:LayoutRoot.RootPanel>
+            <avalondock:LayoutPanel>
+              <avalondock:LayoutDocumentPaneGroup>
+                <avalondock:LayoutDocumentPane>
+                  <avalondock:LayoutDocument Title="Types">
+                    <kmDevWpfControls:TypeTreeViewControl x:Name="TypeTreeView" Assemblies="{Binding ElementName=mainWindow,Path=ViewModel.Assemblies}"
+                                                          SelectedType="{Binding ElementName=mainWindow,Path=ViewModel.SelectedType,Mode=TwoWay}" />
+                  </avalondock:LayoutDocument>
+                  <avalondock:LayoutDocument Title="Main">
+                    <kmDevWpfControls:AssembliesControl1 x:Name="a1" />
+                  </avalondock:LayoutDocument>
+                </avalondock:LayoutDocumentPane>
+              </avalondock:LayoutDocumentPaneGroup>
+              <avalondock:LayoutDocumentPaneGroup>
+                <avalondock:LayoutDocumentPane>
+                  <avalondock:LayoutDocument Title="Type Descriptors">
+                    <kmDevWpfControls:TypeProviderUserControl
+                      Type="{Binding ElementName=mainWindow,Path=ViewModel.SelectedType}" />
+                  </avalondock:LayoutDocument>
+
+                  <avalondock:LayoutDocument Title="Type Info">
+                    <kmDevWpfControls:TypeDetailsControl Type="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=ViewModel.SelectedType}" />
+                  </avalondock:LayoutDocument>
+
+                  <avalondock:LayoutDocument>
+                    <kmDevWpfControls:AssemblyResourceTree1 Assembly="{Binding ElementName=a1,Path=SelectedAssembly}" />
+                  </avalondock:LayoutDocument>
+                </avalondock:LayoutDocumentPane>
+              </avalondock:LayoutDocumentPaneGroup>
+            </avalondock:LayoutPanel>
+          </avalondock:LayoutRoot.RootPanel>
+          <avalondock:LayoutRoot.RightSide>
+            <avalondock:LayoutAnchorSide>
+              <avalondock:LayoutAnchorGroup>
+                <avalondock:LayoutAnchorable Title="zz">
+                  <kmDevWpfControls:VisualTreeView1 />
+                </avalondock:LayoutAnchorable>
+              </avalondock:LayoutAnchorGroup>
+            </avalondock:LayoutAnchorSide>
+          </avalondock:LayoutRoot.RightSide>
+          <avalondock:LayoutRoot.LeftSide>
+            <avalondock:LayoutAnchorSide>
+              <avalondock:LayoutAnchorGroup>
+                <avalondock:LayoutAnchorable Title="beep">
+                  <kmDevWpfControls:AssembliesControl1 />
+                </avalondock:LayoutAnchorable>
+              </avalondock:LayoutAnchorGroup>
+            </avalondock:LayoutAnchorSide>
+          </avalondock:LayoutRoot.LeftSide>
+          <avalondock:LayoutRoot.BottomSide>
+            <avalondock:LayoutAnchorSide>
+              <avalondock:LayoutAnchorGroup>
+                <avalondock:LayoutAnchorable Title="test">
+                  <kmDevWpfControls:TypeTreeViewControl />
+                </avalondock:LayoutAnchorable>
+              </avalondock:LayoutAnchorGroup>
+            </avalondock:LayoutAnchorSide>
+          </avalondock:LayoutRoot.BottomSide>
+        </avalondock:LayoutRoot>
+      </avalondock:DockingManager.Layout>
+      <avalondock:DockingManager.DocumentContextMenu>
+        <avalondock:ContextMenuEx />
+      </avalondock:DockingManager.DocumentContextMenu>
+      <avalondock:DockingManager.AnchorableContextMenu>
+        <avalondock:ContextMenuEx />
+      </avalondock:DockingManager.AnchorableContextMenu>
+    </avalondock:DockingManager>
+  </Grid>
+</Window>
