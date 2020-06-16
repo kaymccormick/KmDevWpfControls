@@ -17,7 +17,8 @@ namespace KmDevWpfControls
             switch (p)
             {
                 case "Editor":
-                    return x.GetEditor(typeof(UITypeEditor));
+                    // return x.GetEditor(typeof(UITypeEditor));
+                    return null;
                 case "InstanceCreationEditor":
                     var convert = x.GetEditor(typeof(InstanceCreationEditor));
                     if (convert != null)

@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
+
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -130,14 +130,14 @@ namespace KmDevWpfControls
                 TypeDescriptor = Provider.GetTypeDescriptor(newType);
                 if (TypeDescriptor != null)
                 {
-                    InstanceCreationEditor = TypeDescriptor.GetEditor(typeof(InstanceCreationEditor));
-                    Editor = TypeDescriptor.GetEditor(typeof(UITypeEditor));
-                    if (Editor != null)
-                    {
-                        var s = ((UITypeEditor) Editor).GetEditStyle();
-                        var p = ((UITypeEditor)Editor).GetPaintValueSupported();
-                        Debug.WriteLine($"{s} {p}");
-                    }
+                    // InstanceCreationEditor = TypeDescriptor.GetEditor(typeof(InstanceCreationEditor));
+                    // Editor = TypeDescriptor.GetEditor(typeof(UITypeEditor));
+                    // if (Editor != null)
+                    // {
+                        // var s = ((UITypeEditor) Editor).GetEditStyle();
+                        // var p = ((UITypeEditor)Editor).GetPaintValueSupported();
+                        // Debug.WriteLine($"{s} {p}");
+                    // }
 
                     
 
@@ -238,40 +238,40 @@ namespace KmDevWpfControls
             {
                 var o11 = ee.CreateInstance(provider, Type);
             }
-             if (Editor is UITypeEditor ui)
-            {
-                var serviceProvider = new X1();
+             // if (Editor is UITypeEditor ui)
+            // {
+                // var serviceProvider = new X1();
                 
-                object o1 = null;
-                try
-                {
-                    var typeConverter = _descriptor.GetConverter();
-                    o1 = typeConverter?.CreateInstance(provider, new Dictionary<string, object>());
-                    provider.Instance = o1;
-                    //o1 = Provider.CreateInstance(serviceProvider, Type, Type.EmptyTypes, new object[] { });
-                }
-                catch
-                {
-                }
+                // object o1 = null;
+                // try
+                // {
+                    // var typeConverter = _descriptor.GetConverter();
+                    // o1 = typeConverter?.CreateInstance(provider, new Dictionary<string, object>());
+                    // provider.Instance = o1;
+                    // o1 = Provider.CreateInstance(serviceProvider, Type, Type.EmptyTypes, new object[] { });
+                // }
+                // catch
+                // {
+                // }
 
-                try
-                {
-                    Instance = Activator.CreateInstance(Type);
-                }
-                catch
-                {
-                }
+                // try
+                // {
+                    // Instance = Activator.CreateInstance(Type);
+                // }
+                // catch
+                // {
+                // }
 
-                Debug.WriteLine("Executing");
-                try
-                {
-                    var o = ui.EditValue(provider, o1);
-                }
-                catch (Exception ex)
-                {
+                // Debug.WriteLine("Executing");
+                // try
+                // {
+                    // var o = ui.EditValue(provider, o1);
+                // }
+                // catch (Exception ex)
+                // {
 
-                }
-            }
+                // }
+            // }
         }
 
 
@@ -344,10 +344,10 @@ namespace KmDevWpfControls
 
         public object GetService(Type serviceType)
         {
-            if (serviceType == typeof(IWindowsFormsEditorService))
-            {
-                return new S(_windowsFormsHost, d, prop);
-            }
+            // if (serviceType == typeof(IWindowsFormsEditorService))
+            // {
+                // return new S(_windowsFormsHost, d, prop);
+            // }
             Debug.WriteLine(serviceType.FullName);
             return null;
         }
@@ -379,7 +379,8 @@ namespace KmDevWpfControls
         }
     }
 
-    public class S : System.Windows.Forms.Design.IWindowsFormsEditorService
+#if false
+public class S : System.Windows.Forms.Design.IWindowsFormsEditorService
     {
         private readonly WindowsFormsHost _windowsFormsHost;
         private readonly DependencyObject _d;
@@ -424,4 +425,5 @@ namespace KmDevWpfControls
             return dialog.ShowDialog();
         }
     }
+#endif
 }
