@@ -20,10 +20,10 @@
     </Setter>
   </Style>
 
-  <Style TargetType="{x:Type local:AssembliesControl1}">
+  <Style TargetType="{x:Type local:AssembliesControl}">
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type local:AssembliesControl1}">
+        <ControlTemplate TargetType="{x:Type local:AssembliesControl}">
           <Border Background="{TemplateBinding Background}"
                   BorderBrush="{TemplateBinding BorderBrush}"
                   BorderThickness="{TemplateBinding BorderThickness}">
@@ -418,10 +418,10 @@
       </Setter.Value>
     </Setter>
   </Style>
-  <Style TargetType="{x:Type local:VisualTreeView1}">
+  <Style TargetType="{x:Type local:VisualTreeView}">
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="{x:Type local:VisualTreeView1}">
+        <ControlTemplate TargetType="{x:Type local:VisualTreeView}">
           <ControlTemplate.Resources>
             <local:RectConverter1 x:Key="RectConverter" />
             <Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>

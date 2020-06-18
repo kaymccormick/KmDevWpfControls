@@ -77,10 +77,6 @@ namespace KmDevWpfControls
             get { return (int)GetValue(NumColumnsProperty); }
             set { SetValue(NumColumnsProperty, value); }
         }
-        public TablePanel()
-        {
-
-        }
 
         List<double> rowHeights = new List<double>(25);
         private List<double> columnWidths = new List<double>(3);

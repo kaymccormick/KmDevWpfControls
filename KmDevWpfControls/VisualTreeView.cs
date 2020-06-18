@@ -11,44 +11,16 @@ using System.Windows.Threading;
 
 namespace KmDevWpfControls
 {
-    /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:AnalysisControls"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:AnalysisControls;assembly=AnalysisControls"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:VisualTreeView/>
-    ///
-    /// </summary>
-    public class VisualTreeView1 : Control
+    
+    public class VisualTreeView : Control
     {
         public static readonly DependencyProperty SelectedVisualTreeNodeProperty = DependencyProperty.Register(
-            "SelectedVisualTreeNode", typeof(VisualTreeNode), typeof(VisualTreeView1),
+            "SelectedVisualTreeNode", typeof(VisualTreeNode), typeof(VisualTreeView),
             new PropertyMetadata(default(Visual), new PropertyChangedCallback(Target)));
 
         private static void Target(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((VisualTreeView1) d).OnSelectedVisualTreeNodeChanged(e.OldValue as VisualTreeNode,
+            ((VisualTreeView) d).OnSelectedVisualTreeNodeChanged(e.OldValue as VisualTreeNode,
                 e.NewValue as VisualTreeNode);
         }
     
@@ -72,7 +44,7 @@ namespace KmDevWpfControls
         public ObservableCollection<VisualTreeNode> InternalRootItems { get; } = new ObservableCollection<VisualTreeNode>();
 
         public static readonly DependencyProperty RootItemsProperty = DependencyProperty.Register(
-            "RootItems", typeof(IEnumerable), typeof(VisualTreeView1), new PropertyMetadata(default(IEnumerable)));
+            "RootItems", typeof(IEnumerable), typeof(VisualTreeView), new PropertyMetadata(default(IEnumerable)));
 
         public IEnumerable RootItems
         {
@@ -81,7 +53,7 @@ namespace KmDevWpfControls
         }
 
         public static readonly DependencyProperty RootVisualProperty = DependencyProperty.Register(
-            "RootVisual", typeof(Visual), typeof(VisualTreeView1), new PropertyMetadata(default(Visual)));
+            "RootVisual", typeof(Visual), typeof(VisualTreeView), new PropertyMetadata(default(Visual)));
 
         private VisualConverter _vc;
         private TreeView _treeView;
@@ -92,7 +64,7 @@ namespace KmDevWpfControls
             get { return (Visual) GetValue(RootVisualProperty); }
             set { SetValue(RootVisualProperty, value); }
         }
-        public VisualTreeView1()
+        public VisualTreeView()
         {
 //            SetBinding(RootItemsProperty, new Binding("RootVisual") {Source = this,Converter = _vc});
 //            RootItems.Add(new VisualTreeNode{Visual = Window.GetWindow(this)});
@@ -167,9 +139,9 @@ namespace KmDevWpfControls
         }
 
 
-        static VisualTreeView1()
+        static VisualTreeView()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(VisualTreeView1), new FrameworkPropertyMetadata(typeof(VisualTreeView1)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(VisualTreeView), new FrameworkPropertyMetadata(typeof(VisualTreeView)));
         }
     }
 }

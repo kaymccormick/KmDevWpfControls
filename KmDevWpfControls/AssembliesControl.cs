@@ -13,15 +13,15 @@ using System.Windows.Media.Imaging;
 namespace KmDevWpfControls
 {
     /// <summary>
-    /// 
+    /// Generic "Assemblies list view" control.
     /// </summary>
-    public class AssembliesControl1 : Control
+    public class AssembliesControl : Control
     {
         /// <summary>
         /// 
         /// </summary>
         public static readonly DependencyProperty AssemblySourceProperty = DependencyProperty.Register(
-            "AssemblySource", typeof(IEnumerable<Assembly>), typeof(AssembliesControl1),
+            "AssemblySource", typeof(IEnumerable<Assembly>), typeof(AssembliesControl),
             new PropertyMetadata(default(IEnumerable<Assembly>)));
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace KmDevWpfControls
         /// 
         /// </summary>
         public static readonly DependencyProperty SelectedAssemblyProperty = DependencyProperty.Register(
-            "SelectedAssembly", typeof(Assembly), typeof(AssembliesControl1), new PropertyMetadata(default(Assembly)));
+            "SelectedAssembly", typeof(Assembly), typeof(AssembliesControl), new PropertyMetadata(default(Assembly)));
 
         /// <summary>
         /// 
@@ -48,13 +48,13 @@ namespace KmDevWpfControls
             set { SetValue(SelectedAssemblyProperty, value); }
         }
 
-        static AssembliesControl1()
+        static AssembliesControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(AssembliesControl1),
-                new FrameworkPropertyMetadata(typeof(AssembliesControl1)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(AssembliesControl),
+                new FrameworkPropertyMetadata(typeof(AssembliesControl)));
         }
 
-        public AssembliesControl1()
+        public AssembliesControl()
         {
             AssemblySource = AppDomain.CurrentDomain.GetAssemblies();
         }
