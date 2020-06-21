@@ -97,7 +97,13 @@ namespace KmDevWpfControls
 
             if (ColumnBasedOnWidth)
             {
-                var ss=CalculateChildrenDesiredSizes();
+                var ss = CalculateChildrenDesiredSizes();
+                if (!ss.Any())
+                {
+                    return Size.Empty;
+                    
+                }
+                
                 var mw=ss.Average(z => z.Width)*1.5 + ColumnSpacing;
                 Debug.WriteLine($"{availableSize.Width} / {mw} = {availableSize.Width/mw:N2}");
 
