@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:KmDevWpfControls"
-             xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=System"
-             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=System"
+             xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=System.Diagnostics.TraceSource"
+             xmlns:diagnostics1="clr-namespace:System.Diagnostics;assembly=System.Diagnostics.TextWriterTraceListener"
+
+
              mc:Ignorable="d" x:Name="traceView"
              d:DesignHeight="450" d:DesignWidth="800">
   <UserControl.Resources>
@@ -37,7 +39,7 @@
     <local:TraceSourcesView Grid.Row="1" x:Name="view"></local:TraceSourcesView>
     <Grid Grid.Row="2">
       <Grid.Resources>
-        <DataTemplate DataType="{x:Type diagnostics:XmlWriterTraceListener}">
+        <DataTemplate DataType="{x:Type diagnostics1:XmlWriterTraceListener}">
           <local:TablePanel>
             <TextBlock Text="File"/>
             <local:FileInputBox x:Name="FileInputBox"></local:FileInputBox>
@@ -45,7 +47,8 @@
             <local:EnumFlagsSelector x:Name="flags" Value="{Binding RelativeSource={RelativeSource TemplatedParent},Path=TraceOptions}" EditStyle="ItemsControl" EnumType="{x:Type diagnostics:TraceOptions}"/>
             <TextBlock Text="{Binding ElementName=flags,Path=Value}"></TextBlock>
             <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=PropertyDescriptorCollection}">
-              <ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemTemplate>
                 <DataTemplate>
                   <WrapPanel>
                     <TextBlock Text="{Binding Name}"/>
@@ -59,7 +62,7 @@
           </local:TablePanel>
 
         </DataTemplate>
-        <DataTemplate DataType="{x:Type diagnostics:ConsoleTraceListener}">
+        <DataTemplate DataType="{x:Type diagnostics1:ConsoleTraceListener}">
           <local:TablePanel>
             <Button Command="Save" Content="Save"/>
             <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=UserControl},Path=Listener}"/>

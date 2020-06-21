@@ -1469,7 +1469,8 @@
                 <ColumnDefinition Width="*" />
               </Grid.ColumnDefinitions>
 
-              <ListView SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent},Path=SelectedTraceSource,Mode=TwoWay}"  x:Name="ListView" ItemsSource="{Binding Source={x:Static local:TraceSourcesView.Sources}}">
+              <ListView SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent},Path=SelectedTraceSource,Mode=TwoWay}"  x:Name="ListView"
+                        ItemsSource="{Binding Source={x:Static local:TraceSourcesView.Sources}}">
                 <ListView.View>
                   <GridView>
                     <GridViewColumn Header="Name"  DisplayMemberBinding="{Binding Name}" />
