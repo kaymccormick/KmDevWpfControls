@@ -52,7 +52,7 @@ namespace KmDevWpfControls
             //(_listView.View as GridView).
             CollectionViewSource.GetDefaultView(Sources)?.Refresh();
         }
-        public static IEnumerable<TraceSource> Sources = new[]
+        public static IEnumerable<TraceSource> Sources { get; } = new[]
         {
             PresentationTraceSources.AnimationSource,
             PresentationTraceSources.DataBindingSource,
