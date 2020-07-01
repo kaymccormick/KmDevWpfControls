@@ -1,40 +1,117 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace KmDevWpfControls
 {
     /// <summary>
     /// Interaction logic for TraceView.xaml
     /// </summary>
-    public partial class TraceView : UserControl
+    public partial class TraceView : Control
     {
         public static readonly RoutedEvent TraceListenerCreatedEvent = EventManager.RegisterRoutedEvent("TraceListenerCreated",
             RoutingStrategy.Bubble, typeof(TraceListenerCreatedHandler), typeof(TraceView));
 
         public delegate void TraceListenerCreatedHandler(object sender, TraceListenerCreatedEventArgs e);
 
+        static TraceView()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(TraceView), new FrameworkPropertyMetadata(typeof(TraceView)));
+            CommandManager.RegisterClassCommandBinding(typeof(TraceView), new CommandBinding(ApplicationCommands.Save, SaveExecuted));
+            CommandManager.RegisterClassCommandBinding(typeof(TraceView), new CommandBinding(NavigationCommands.Refresh, RefreshExecuted));
+        }
+
+        private static void RefreshExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var tv = (TraceView)sender;
+            tv.CommandBinding_OnExecuted(sender, e);
+        }
+
+        private static void SaveExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            var tv = (TraceView) sender;
+            tv.CommandBinding_OnExecuted3(sender, e);
+        }
+
         public TraceView()
         {
-            PropertyDescriptorCollection = TypeDescriptor.GetProperties(typeof(XmlWriterTraceListener));
+            //PropertyDescriptorCollection = TypeDescriptor.GetProperties(typeof(XmlWriterTraceListener));
+            _listeners = new ObservableCollection<TraceListener>();
+            Listeners = _listeners;
+        }
 
-            InitializeComponent();
-            Edit.DataContextChanged += Edit_DataContextChanged;
-            Combo.SelectionChanged += Combo_SelectionChanged;
+        /// <inheritdoc />
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            Edit = (ContentPresenter)GetTemplateChild("Edit");
+            Combo = (ComboBox) GetTemplateChild("Combo");
+            View = (TraceSourcesView) GetTemplateChild("View");
+            ListenersView = (ListView) GetTemplateChild("ListenersView");
+            CreateScrollViewer = (ScrollViewer) GetTemplateChild("CreateScrollViewer");
+        }
+
+        public ListView ListenersView
+        {
+            get { return _listenersView; }
+            set
+            {
+                _listenersView = value;
+
+                
+            }
+        }
+
+        public static readonly DependencyProperty ListenersProperty = DependencyProperty.Register(
+            "Listeners", typeof(IEnumerable), typeof(TraceView), new PropertyMetadata(default(IEnumerable), OnListenersChanged));
+
+        public IEnumerable Listeners
+        {
+            get { return (IEnumerable) GetValue(ListenersProperty); }
+            set { SetValue(ListenersProperty, value); }
+        }
+
+        private static void OnListenersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TraceView) d).OnListenersChanged((IEnumerable) e.OldValue, (IEnumerable) e.NewValue);
+        }
+
+
+
+        protected virtual void OnListenersChanged(IEnumerable oldValue, IEnumerable newValue)
+        {
+        }
+
+        public TraceSourcesView View { get; set; }
+
+        public ComboBox Combo
+        {
+            get { return _combo; }
+            set
+            {
+                if (_combo != null) _combo.SelectionChanged -= Combo_SelectionChanged;
+                _combo = value;
+                if (_combo != null) _combo.SelectionChanged += Combo_SelectionChanged;
+            }
+        }
+
+        public ContentPresenter Edit
+        {
+            get { return _edit; }
+            set
+            {
+                if (_edit != null) _edit.DataContextChanged -= Edit_DataContextChanged;
+                _edit = value;
+                if (_edit != null) _edit.DataContextChanged += Edit_DataContextChanged;
+            }
         }
 
         public event TraceListenerCreatedHandler TraceListenerCreated    
@@ -52,8 +129,12 @@ namespace KmDevWpfControls
         private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var t = e.AddedItems.Cast<Type>().FirstOrDefault();
+            PropertyDescriptorCollection = TypeDescriptor.GetProperties(t);
             Edit.Content = t;
+            CreateScrollViewer.Visibility = Visibility.Visible;
         }
+
+        public ScrollViewer CreateScrollViewer { get; set; }
 
         private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -65,7 +146,7 @@ namespace KmDevWpfControls
         {
             if (b)
                 PresentationTraceSources.Refresh();
-            view.Refresh();
+            View?.Refresh();
         }
 
         private void CommandBinding_OnExecuted2(object sender, ExecutedRoutedEventArgs e)
@@ -127,6 +208,11 @@ namespace KmDevWpfControls
 
         public static readonly DependencyProperty ListenerTypesProperty = DependencyProperty.Register(
             "ListenerTypes", typeof(IEnumerable), typeof(TraceView), new PropertyMetadata(default(IEnumerable), OnListenerTypesChanged));
+
+        private ContentPresenter _edit;
+        private ComboBox _combo;
+        private ObservableCollection<TraceListener> _listeners;
+        private ListView _listenersView;
 
         public IEnumerable ListenerTypes
         {
@@ -226,8 +312,8 @@ namespace KmDevWpfControls
             var ev = new TraceListenerCreatedEventArgs(TraceListenerCreatedEvent, this, xx);
             RaiseEvent(ev);
 
-            view.SelectedTraceSource?.Listeners.Add(xx);
-            view.Refresh();
+            View?.SelectedTraceSource?.Listeners.Add(xx);
+            View?.Refresh();
             try
             {
                 Debug.WriteLine(PresentationTraceSources.RoutedEventSource.Switch.Level);
@@ -241,6 +327,7 @@ namespace KmDevWpfControls
             }
 
             //PresentationTraceSources.DataBindingSource.Listeners.Add(xx);
+            _listeners.Add(xx);
             Listener = xx;
         }
     }

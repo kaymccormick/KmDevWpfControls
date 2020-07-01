@@ -147,7 +147,7 @@ namespace KmDevWpfControls
 
                     if (val == null)
                     {
-                        convval = "null/converted";
+                        convval = "null";
                     }
                     else
                     {

@@ -50,7 +50,8 @@ namespace KmDevWpfControls
         public void Refresh()
         {
             //(_listView.View as GridView).
-            CollectionViewSource.GetDefaultView(Sources)?.Refresh();
+            var collectionView = CollectionViewSource.GetDefaultView(Sources);
+            collectionView?.Refresh();
         }
         public static IEnumerable<TraceSource> Sources = new[]
         {

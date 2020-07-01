@@ -202,12 +202,14 @@ namespace KmDevWpfControls
         protected virtual void OnEnumTypeChanged(Type oldValue, Type newValue)
         {
             _internalItems.Clear();
-            foreach (var value in Enum.GetValues(newValue))
-            {
-                var checkableModelItem = new CheckableModelItem<object>( value);
-                checkableModelItem.PropertyChanged += CheckableModelItemOnPropertyChanged;
-                _internalItems.Add(checkableModelItem);
-            }
+            if (newValue != null)
+                foreach (var value in Enum.GetValues(newValue))
+                {
+                    var checkableModelItem = new CheckableModelItem<object>(value);
+                    checkableModelItem.PropertyChanged += CheckableModelItemOnPropertyChanged;
+                    _internalItems.Add(checkableModelItem);
+                }
+
             UpdateItemsChecked(Value);
         }
 
