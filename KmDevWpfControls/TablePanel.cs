@@ -97,7 +97,7 @@ namespace KmDevWpfControls
 
             if (ColumnBasedOnWidth)
             {
-                var ss=CalculateChildrenDesiredSizes();
+                var ss = CalculateChildrenDesiredSizes();
                 if (!ss.Any())
                 {
                     return Size.Empty;

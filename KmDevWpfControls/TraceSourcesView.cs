@@ -53,7 +53,7 @@ namespace KmDevWpfControls
             var collectionView = CollectionViewSource.GetDefaultView(Sources);
             collectionView?.Refresh();
         }
-        public static IEnumerable<TraceSource> Sources = new[]
+        public static IEnumerable<TraceSource> Sources { get; } = new[]
         {
             PresentationTraceSources.AnimationSource,
             PresentationTraceSources.DataBindingSource,

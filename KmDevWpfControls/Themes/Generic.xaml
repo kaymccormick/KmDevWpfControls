@@ -1452,35 +1452,216 @@
                                 </TabItem>
                             </TabControl>
                         </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+                      </GroupBox>
+                      <GroupBox Padding="3" Grid.Row="5" Grid.Column="0" Header="Interfaces">
+                        <ItemsControl
+                          DataContext="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=Type}"
+                          ItemsSource="{Binding Converter={StaticResource TypeInfoConverter},ConverterParameter=Interfaces}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type system:Type}">
+                              <TextBlock Grid.Row="1" Grid.Column="1" FontSize="14" Text="{Binding}"
+                                         Margin="5,0,0,5" />
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                          <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                              <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                          </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                      </GroupBox>
+                    </Grid>
+                  </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Properties">
+                  <ListView
+                    ItemsSource="{Binding Properties}">
+                    <ListView.View>
+                      <GridView>
+                        <GridViewColumn Header="Property Type">
+                          <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type componentModel:PropertyDescriptor}">
+                              <TextBlock Text="{Binding PropertyType,Converter={StaticResource TestConverter2}}" />
+                            </DataTemplate>
+                          </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Property Name" DisplayMemberBinding="{Binding Name}" />
+                      </GridView>
+                    </ListView.View>
+                  </ListView>
+                </TabItem>
+                <TabItem Header="Methods">
+                  <ListView
+                    ItemsSource="{Binding Converter={StaticResource TypeInfoConverter},ConverterParameter=Methods}">
+                    <ListView.View>
+                      <GridView>
+                        <GridViewColumn Header="Return Type">
+                          <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type reflection:MethodInfo}">
+                              <local:TypeControl VerticalAlignment="Top" Type="{Binding ReturnType}" />
+                            </DataTemplate>
+                          </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Declaring Type">
+                          <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type reflection:MethodInfo}">
+                              <local:TypeControl Type="{Binding DeclaringType}" VerticalAlignment="Top" />
+                            </DataTemplate>
+                          </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Name">
+                          <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type reflection:MethodInfo}">
+                              <TextBlock VerticalAlignment="Top" Text="{Binding Name}" />
+                            </DataTemplate>
+                          </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Parameters">
+                          <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type reflection:MethodInfo}">
+                              <ItemsControl
+                                ItemsSource="{Binding Converter={StaticResource MethodInfoConverter},ConverterParameter=Parameters}">
+                                <ItemsControl.ItemsPanel>
+                                  <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                  </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+
+                                  <DataTemplate DataType="{x:Type reflection:ParameterInfo}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                      <ItemsControl
+                                        ItemsSource="{Binding Tags}">
+                                        <ItemsControl.ItemsPanel>
+                                          <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                          </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                          <DataTemplate>
+                                            <TextBlock Margin="3,0,3,0" Padding="5" Background="BurlyWood"
+                                                       Text="{Binding}" />
+                                          </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                      </ItemsControl>
+                                      <local:TypeControl FontWeight="Bold" VerticalContentAlignment="Center"
+                                                         Type="{Binding Type}" />
+                                      <TextBlock Text=" " />
+                                      <TextBlock Text="{Binding Name}" />
+                                      <TextBlock Text=", " />
+                                    </StackPanel>
+                                  </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                              </ItemsControl>
+                            </DataTemplate>
+                          </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                      </GridView>
+                    </ListView.View>
+                  </ListView>
+                </TabItem>
+                <TabItem Header="Properties2"
+                         DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:TypeDetailsControl}}">
+                  <ListView ItemsSource="{Binding Path=PropertyDescriptorCollection}">
+                    <ListView.View>
+                      <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                        <GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Header="Display Name" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Category}" Header="Category" />
+                        <GridViewColumn DisplayMemberBinding="{Binding IsBrowsable}" Header="Browsable" />
+                        <GridViewColumn Header="Attributes">
+                          <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                              <ItemsControl ItemsSource="{Binding Attributes}">
+                                <ItemsControl.ItemsPanel>
+                                  <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                  </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                  <DataTemplate DataType="{x:Type system:Attribute}">
+                                    <TextBlock Text="{Binding}" />
+                                  </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                              </ItemsControl>
+
+                            </DataTemplate>
+                          </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Description" />
+                        <GridViewColumn DisplayMemberBinding="{Binding SerializationVisibility}"
+                                        Header="SerializationVisibility" />
+                      </GridView>
+
+                    </ListView.View>
+                  </ListView>
+                </TabItem>
+              </TabControl>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
 
-    <Style TargetType="{x:Type local:TypeControl}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:TypeControl}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+  <Style TargetType="{x:Type local:TypeControl}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:TypeControl}">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
 
-                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Type.FullName}" />
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Type.FullName}" />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
 
 
-    <Style TargetType="{x:Type local:TraceSourcesView}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:TraceSourcesView}">
-                    <ControlTemplate.Resources>
-                        <local:GetTypeConverter1 x:Key="GetTypeConverter" />
+  <Style TargetType="{x:Type local:TraceSourcesView}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type local:TraceSourcesView}">
+          <ControlTemplate.Resources>
+            <local:GetTypeConverter1 x:Key="GetTypeConverter"></local:GetTypeConverter1>
+            <DataTemplate DataType="{x:Type diagnostics:TraceSource}">
+              <local:TablePanel>
+                <TextBlock Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="{Binding Switch.DisplayName}"></TextBlock>
+                <TextBlock Text="{Binding Switch.Description}"></TextBlock>
+                <TextBlock Text="{Binding Switch.Level}"></TextBlock>
+              </local:TablePanel>
+
+            </DataTemplate>
+          </ControlTemplate.Resources>
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+              </Grid.ColumnDefinitions>
+
+              <ListView SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent},Path=SelectedTraceSource,Mode=TwoWay}"  x:Name="ListView"
+                        ItemsSource="{Binding Source={x:Static local:TraceSourcesView.Sources}}">
+                <ListView.View>
+                  <GridView>
+                    <GridViewColumn Header="Name"  DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Display Name"  DisplayMemberBinding="{Binding DisplayName}" />
+                    <GridViewColumn Header="Listener Count"  DisplayMemberBinding="{Binding Listeners.Count}" />
+                    <GridViewColumn Header="Switch Description"   DisplayMemberBinding="{Binding Switch.Description}" />
+                    <GridViewColumn Header="Switch Display Name" DisplayMemberBinding="{Binding Switch.DisplayName}" />
+                    <GridViewColumn Header="Level">
+                      <GridViewColumn.CellTemplate>
                         <DataTemplate DataType="{x:Type diagnostics:TraceSource}">
                             <local:TablePanel Margin="10">
                                 <TextBlock FontWeight="Bold">Name</TextBlock>
@@ -1749,7 +1930,8 @@
                                         <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name"></GridViewColumn>
                                     </GridView>
                                 </ListView.View>
-                            </ListView>
+
+</ListView>
 
                         </Grid>
                         
